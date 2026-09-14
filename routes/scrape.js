@@ -15,9 +15,19 @@ router.post('/comments', async (req, res) => {
 
     const participants = await getCommentsFromPost(url);
 
+    // Lista de usernames que devem ser excluídos do sorteio
+    const EXCLUDED_USERS = [
+      'nutripolianacampos',
+      // pode adicionar mais depois
+    ];
+
+    const filteredParticipants = participants.filter(
+      p => !EXCLUDED_USERS.includes(p.username.toLowerCase())
+    );
+
     res.json({
-      participants,          // agora é array de objetos
-      total: participants.length
+      participants: filteredParticipants,          // agora é array de objetos
+      total: filteredParticipants.length
     });
 
   } catch (err) {
