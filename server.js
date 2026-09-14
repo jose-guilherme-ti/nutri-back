@@ -1,15 +1,28 @@
 import express from 'express';
 import cors from 'cors';
+import dotenv from 'dotenv';
 import scrapeRouter from './routes/scrape.js';
 
-const app = express();
-const PORT = 3001;
+dotenv.config();
 
-app.use(cors());
+const app = express();
+
+app.use(cors({
+  origin: '*'
+}));
+
 app.use(express.json());
 
+// Rota de teste (para verificar se está online)
+app.get('/', (req, res) => {
+  res.json({ 
+    message: 'Backend Instagram Sorteio online!',
+    status: 'ok'
+  });
+});
+
+// Suas rotas
 app.use('/api', scrapeRouter);
 
-app.listen(3001, '0.0.0.0', () => {
-  console.log('Servidor rodando em http://0.0.0.0:3001');
-});
+// Exporta o app (obrigatório no Vercel)
+export default app;
